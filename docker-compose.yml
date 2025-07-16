@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  api-genqa:
+    build: .
+    ports:
+      - "8005:8005"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8005/docs')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
